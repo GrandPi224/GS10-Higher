@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market Takeaways Quiz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); /* Base dark background */
+      color: #f0f4f8; /* Slightly softer off-white for general text */
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff; /* Pure white for main title for emphasis */
+      font-size: 2.8rem;
+      text-shadow: 0 4px 6px rgba(0,0,0,0.5);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background: #1e293b; /* Dark slate - consistent with body */
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid #334155; /* Subtle border */
+    }
+
+    .question {
+      margin-bottom: 2.5rem;
+      border-bottom: 2px dashed #334155; /* Dashed border for separation */
+      padding-bottom: 1.5rem;
+      background: #0f172a; /* Slightly darker background for question block */
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .question h3 {
+      margin-bottom: 1rem;
+      color: #38bdf8; /* Primary Accent: Bright Sky Blue - for question titles */
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      font-size: 1.3rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Unified color for icons within question titles */
+    .question h3 .fas,
+    .question h3 .fab {
+      color: #55c6f7; /* Slightly lighter/softer blue for icons within titles */
+      margin-right: 10px;
+    }
+
+    .options button {
+      display: block;
+      margin: 0.8rem 0;
+      padding: 1rem 1.5rem;
+      border: 1px solid #334155; /* Default border */
+      border-radius: 8px;
+      background: #27354a; /* Slightly lighter than quiz container for buttons */
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: all 0.2s ease;
+      font-size: 1.05rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      color: #e2e8f0; /* Light text for buttons */
+      font-weight: 500;
+    }
+
+    /* Unified color for icons as pseudo-elements in buttons */
+    .options button:before {
+      content: "\f0c8"; /* Default square icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 400;
+      margin-right: 12px;
+      font-size: 1.2rem;
+      color: #38bdf8; /* Primary Accent: Bright Sky Blue */
+    }
+
+    /* Unified color for inline icons within buttons (if any were added beyond :before) */
+    .options button .fas,
+    .options button .fab {
+      color: #55c6f7; /* Consistent with question title icons */
+      margin-right: 10px;
+    }
+
+    .options button:hover {
+      background: #334155; /* Darker on hover */
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      border-color: #60a5fa; /* Lighter blue for hover border */
+    }
+
+    .options button.correct {
+      background: #059669; /* Richer Green for correct */
+      border-left: 5px solid #10b981; /* Bright Green accent */
+      color: #f0fdf4; /* Light green text */
+      font-weight: 600;
+    }
+
+    .options button.correct:before {
+      content: "\f00c"; /* Checkmark */
+      font-weight: 900;
+      color: #10b981; /* Bright Green */
+    }
+
+    .options button.wrong {
+      background: #be123c; /* Richer Red for wrong */
+      border-left: 5px solid #ef4444; /* Bright Red accent */
+      color: #fef2f2; /* Light red text */
+      font-weight: 600;
+    }
+
+    .options button.wrong:before {
+      content: "\f00d"; /* Cross mark */
+      font-weight: 900;
+      color: #ef4444; /* Bright Red */
+    }
+
+    .explanation {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #e2e8f0; /* Light text for explanation */
+      background: #334155; /* Consistent dark slate */
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 4px solid #60a5fa; /* Lighter Blue for explanation accent */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .explanation:before {
+      content: "\f059"; /* Info icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      margin-right: 8px;
+      color: #60a5fa; /* Lighter Blue */
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      background: #1a2536; /* Slightly different dark for header block */
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .quiz-header h1 {
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+      font-size: 2.5rem;
+    }
+
+    .quiz-header p {
+      color: #cbd5e1; /* Muted light blue/gray */
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .question-counter {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.15); /* Transparent Primary Accent */
+      color: #38bdf8; /* Primary Accent */
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3); /* Transparent Primary Accent Border */
+    }
+
+    .progress-bar {
+      height: 12px;
+      background: #27354a; /* Darker base for progress bar */
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+      border: 1px solid #475569; /* Subtle border */
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(to right, #3b82f6, #2563eb); /* Gradient from primary accent to a deeper blue */
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .icons-box {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .icon-item {
+      font-size: 2rem;
+      margin: 0 20px;
+      color: #38bdf8; /* Primary Accent for header icons */
+      text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <div class="icons-box">
+        <i class="icon-item fas fa-chart-line"></i>
+        <i class="icon-item fas fa-brain"></i>
+        <i class="icon-item fas fa-cogs"></i>
+        <i class="icon-item fas fa-bullseye"></i>
+      </div>
+      <h1>Market Takeaways Quiz</h1>
+      <p>Test your knowledge of recent market insights!</p>
+      <div class="question-counter">Question <span id="current-q">1</span> of <span id="total-q">14</span></div>
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+    </div>
+
+    <div class="question" id="q1">
+      <h3><i class="fas fa-drivers-license"></i> Regarding Key Market Drivers & Tech Sector Rebound, which of the following was NOT mentioned as a primary reason for the recent tech rally?</h3>
+      <div class="options">
+        <button>A) Upbeat earnings from tech companies.</button>
+        <button data-correct="true" data-explain="The transcript states: 'One was an upbeat set of earnings...Two was some clarity around tariff and trade. And three was positioning.' Increased government subsidies were not mentioned as a driver.">B) Increased government subsidies for tech research.</button>
+        <button>C) Clarity around tariff and trade issues.</button>
+        <button>D) Market positioning, with capital returning to the market.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q2">
+      <h3><i class="fas fa-arrow-trend-up"></i> Under 'Tech Rally Drivers,' what was the growth percentage of S&P earnings in Q1, which tech outpaced?</h3>
+      <div class="options">
+        <button>A) 6%</button>
+        <button>B) 10%</button>
+        <button data-correct="true" data-explain="According to the transcript: 'S&P earnings grew 12 percent in Q1. Market expectations were closer to six, going into earnings. And tech outpaced that.' ">C) 12%</button>
+        <button>D) 15%</button>
+      </div>
+    </div>
+
+    <div class="question" id="q3">
+      <h3><i class="fas fa-shield-halved"></i> What was highlighted about 'Resilient Tech Fundamentals'?</h3>
+      <div class="options">
+        <button>A) Tech fundamentals showed significant weakness in Q1.</button>
+        <button data-correct="true" data-explain="The transcript notes: 'But the big picture story was tech fundamentals resilient through the first three months of the year despite the volatility you've seen in markets.' ">B) Despite market volatility, tech fundamentals remained resilient through the first three months of the year.</button>
+        <button>C) Tech companies are becoming less healthy.</button>
+        <button>D) The resilience of tech fundamentals is solely dependent on AI advancements.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q4">
+      <h3><i class="fas fa-robot"></i> What is the general sentiment regarding 'The Role and Outlook for Artificial Intelligence (AI)'?</h3>
+      <div class="options">
+        <button>A) AI is a fading trend with little future impact.</button>
+        <button>B) AI's role is diminishing as other technologies take precedence.</button>
+        <button data-correct="true" data-explain="The discussion suggests a renewed focus on AI: 'I think as those macro headwinds go away, you replace it with the micro. And here we are talking about Al again... For me, I think the AI theme starts to catch momentum again into the second half of the year.' ">C) The market is regaining focus on AI, and its momentum is expected to grow.</button>
+        <button>D) Investment in AI is now seen as too risky.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q5">
+      <h3><i class="fas fa-eye"></i> According to the discussion on 'AI Regaining Focus,' why had AI conversations and stock prices previously lagged?</h3>
+      <div class="options">
+        <button>A) Due to a lack of breakthroughs in AI technology.</button>
+        <button data-correct="true" data-explain="The transcript explains: 'This year, what'd we replace it with? Tariffs and recession. When those things became all the talk in the market, I found that Al conversations, conviction, and certainly stock prices started to lag.' ">B) Because market attention shifted to tariffs and recession fears.</button>
+        <button>C) Due to ethical concerns surrounding AI development.</button>
+        <button>D) Because investors lost confidence in AI's long-term potential.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q6">
+      <h3><i class="fas fa-rocket"></i> What is the expectation for 'AI Momentum Expected'?</h3>
+      <div class="options">
+        <button>A) AI momentum will likely slow down in the second half of the year.</button>
+        <button data-correct="true" data-explain="Peter Callahan states: 'For me, I think the AI theme starts to catch momentum again into the second half of the year.' ">B) The AI theme is anticipated to gain momentum again into the second half of the year.</button>
+        <button>C) AI has already reached its peak momentum.</button>
+        <button>D) AI momentum is solely dependent on government regulation.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q7">
+      <h3><i class="fas fa-hand-holding-dollar"></i> What are investors becoming comfortable with regarding 'AI Investment Driving Returns'?</h3>
+      <div class="options">
+        <button>A) That AI investments are guaranteed to provide short-term profits.</button>
+        <button>B) That only large corporations can benefit from AI investments.</button>
+        <button data-correct="true" data-explain="The transcript mentions: 'But I think the market started to get comfortable again in this framework of investing will drive returns. And Q1 was a step forward in that direction.' ">C) That the framework of investing in AI will drive returns, supported by Q1 earnings.</button>
+        <button>D) That AI investment is best avoided due to market uncertainty.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q8">
+      <h3><i class="fas fa-comments-dollar"></i> What is the central point of 'Market Themes and Investor Sentiment' as discussed?</h3>
+      <div class="options">
+        <button>A) Investor sentiment is overwhelmingly negative across all sectors.</button>
+        <button>B) Market themes are static and show little change year over year.</button>
+        <button data-correct="true" data-explain="The discussion covers key debates: 'Chris, you just asked the number one debate that we've had all year with our investors is what happened to big tech and why did it lose its defensiveness?... Yeah. You know, that whole market concentration debate has really quieted down.' ">C) Key debates include tech's defensiveness and evolving views on market concentration.</button>
+        <button>D) Investors are primarily focused on non-US markets.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q9">
+      <h3><i class="fas fa-shield-virus"></i> What is the current status of the 'Tech's Defensiveness Debate'?</h3>
+      <div class="options">
+        <button>A) It's widely agreed that tech stocks are no longer defensive.</button>
+        <button data-correct="true" data-explain="The speaker notes: 'I think Q1 earnings took a step forward in convincing investors that this stuff is still resilient. Right? Liquid. Capital return stories. Investing for future growth. Large customer bases.' This suggests a move towards reaffirming their resilience.">B) Q1 earnings have started to reassure investors of tech's resilience and potential defensiveness.</button>
+        <button>C) Tech stocks have always been considered purely pro-cyclical.</button>
+        <button>D) The defensiveness of tech stocks is no longer a topic of discussion.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q10">
+      <h3><i class="fas fa-compress-arrows-alt"></i> What has happened regarding 'Market Concentration Easing'?</h3>
+      <div class="options">
+        <button>A) Market concentration in top tech names has significantly worsened.</button>
+        <button data-correct="true" data-explain="The transcript states: 'Yeah. You know, that whole market concentration debate has really quieted down... So, I think some of that dispersion has at least gotten investors comfortable that there is some opportunity for stock picking.' ">B) Concerns about market concentration have quieted, with more dispersion offering stock-picking opportunities.</button>
+        <button>C) All top tech stocks are performing identically, increasing concentration fears.</button>
+        <button>D) Investors are now exclusively looking at smaller stocks, abandoning mega-caps.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q11">
+      <h3><i class="fas fa-binoculars"></i> What is the outlook in 'Short-Term Caution, Longer-Term Positive'?</h3>
+      <div class="options">
+        <button>A) The market is expected to decline sharply in both the short and long term.</button>
+        <button data-correct="true" data-explain="Callahan mentions: 'admittedly, locally we've had such a big run-off the lows it's a little bit harder to call the short term. But I would just say the NASDAQ's flat on the year. Earnings are still growing double digits for large-cap tech stocks. Al is still, I would say, more ahead of us than behind us. And so, I think that sets up a pretty good fact pattern from here.' ">B) Despite short-term uncertainties after a big run-up, the longer-term fact pattern for tech is viewed as pretty good.</button>
+        <button>C) The outlook is overwhelmingly positive with no caution advised.</button>
+        <button>D) The long-term outlook for tech is considered poor, despite recent gains.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q12">
+      <h3><i class="fas fa-tasks"></i> Overall, what are the key areas to monitor according to 'What to Watch'?</h3>
+      <div class="options">
+        <button>A) Only macroeconomic indicators from international markets.</button>
+        <button>B) Primarily past earnings reports and historical stock performance.</button>
+        <button data-correct="true" data-explain="The speaker indicates a focus on: 'a busy stretch of conferences, user events, analyst days. It's time for the micro to take over the next couple of weeks. And then I'll keep one eye on the rates market.' ">C) A shift to micro-level company events and the interest rates market.</button>
+        <button>D) Geopolitical events exclusively, with no focus on company specifics.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q13">
+      <h3><i class="fas fa-microscope"></i> What does 'Micro Over Macro' suggest for the near term?</h3>
+      <div class="options">
+        <button>A) A greater focus on broad economic policies.</button>
+        <button data-correct="true" data-explain="This refers to focusing on company specifics: 'So, I'm watching a busy stretch of conferences, user events, analyst days. It's time for the micro to take over the next couple of weeks.' ">B) Attention shifting to company-specific news from conferences, user events, and analyst days.</button>
+        <button>C) That macroeconomic data will be the sole driver of market movements.</button>
+        <button>D) A disregard for individual company performance.</button>
+      </div>
+    </div>
+
+    <div class="question" id="q14">
+      <h3><i class="fas fa-percentage"></i> Why are 'Interest Rates' important to watch, especially for tech stocks?</h3>
+      <div class="options">
+        <button>A) Because tech companies are the primary issuers of government bonds.</button>
+        <button>B) Because lower interest rates always harm tech stock valuations.</button>
+        <button data-correct="true" data-explain="The transcript highlights the sensitivity of tech stocks to rates: 'So many future cash flows in tech stocks that rates matter a lot for these guys.' ">C) Because tech stocks often have significant future cash flows, making them sensitive to interest rate changes.</button>
+        <button>D) Because interest rates only affect the borrowing costs of tech startups.</button>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    document.querySelectorAll(".options button").forEach(button => {
+      button.addEventListener("click", () => {
+        const questionElement = button.closest(".question");
+        const optionsContainer = button.closest(".options");
+        const allOptionButtons = optionsContainer.querySelectorAll("button");
+        const correctButton = optionsContainer.querySelector("button[data-correct='true']");
+
+        allOptionButtons.forEach(b => {
+          b.disabled = true;
+          if (b === correctButton) {
+            b.classList.add("correct");
+          } else if (b === button && b !== correctButton) {
+            b.classList.add("wrong");
+          }
+        });
+
+        // Show explanation if available and not already shown
+        if (correctButton.dataset.explain && !optionsContainer.querySelector('.explanation')) {
+          const exp = document.createElement('div');
+          exp.className = 'explanation';
+          // Create a text node for "Explanation: "
+          const explanationPrefix = document.createTextNode('Explanation: ');
+          exp.appendChild(explanationPrefix);
+          // Create a span for the actual explanation text to allow for styling or further manipulation if needed
+          const explanationText = document.createElement('span');
+          explanationText.textContent = correctButton.dataset.explain;
+          exp.appendChild(explanationText);
+          optionsContainer.appendChild(exp);
+        }
+        
+        // Update current question and progress
+        const allQuestions = document.querySelectorAll('.question');
+        let answeredCount = 0;
+        allQuestions.forEach(q => {
+            if (q.querySelector('.options button:disabled')) {
+                answeredCount++;
+            }
+        });
+
+        document.getElementById('current-q').textContent = answeredCount;
+        const progressPercent = (answeredCount / allQuestions.length) * 100;
+        document.getElementById('progress').style.width = progressPercent + '%';
+      });
+    });
+
+    // Set total questions
+    document.getElementById('total-q').textContent = document.querySelectorAll('.question').length;
+    // Initialize current question to 0
+    document.getElementById('current-q').textContent = 0;
+  </script>
+</body>
+</html>
